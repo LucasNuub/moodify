@@ -45,7 +45,11 @@ export default function MoodPlaylistCurator() {
 
   const accent = selectedMood?.color || "#A78BFA";
 
-  async function generate() {
+  async function shuffle() {
+    await generate(true);
+  }
+
+  async function generate(isShuffle = false) {
     if (!mood.trim()) return;
     setStep("loading");
     setError("");
@@ -80,7 +84,7 @@ Songs should perfectly match the mood. Be specific, not generic. ${langInstructi
           max_tokens: 1000,
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: `Mood: "${mood}"${selectedMood ? ` — category: ${selectedMood.label}` : ""}. Language: ${language === "hindi" ? "Hindi" : "English"}.` }
+            { role: "user", content: `Mood: "${mood}"${selectedMood ? ` — category: ${selectedMood.label}` : ""}. Language: ${language === "hindi" ? "Hindi" : "English"}.${isShuffle ? " Give me a completely different fresh set of 5 songs — avoid obvious or common picks, surprise me." : ""}` }
           ],
         })
       });
@@ -306,6 +310,18 @@ Songs should perfectly match the mood. Be specific, not generic. ${langInstructi
                 </div>
               ))}
             </div>
+
+            {/* Shuffle */}
+            <button onClick={shuffle} style={{
+              width: "100%", padding: "13px",
+              borderRadius: "12px", border: `1px solid ${accent}40`,
+              background: accent + "12",
+              color: accent, fontSize: "14px", fontWeight: "600",
+              cursor: "pointer", fontFamily: "inherit",
+              marginBottom: "10px", transition: "all 0.2s",
+            }}>
+              🔀 Shuffle — get different songs
+            </button>
 
             {/* Open Spotify */}
             <button onClick={openSpotify} style={{
