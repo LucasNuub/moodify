@@ -30,7 +30,7 @@ An AI-powered mood playlist curator built with React + Groq (Llama 3). Pick a mo
 In the root of the project, create a file named `.env`:
 
 ```
-VITE_GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx
+GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 > This file is in `.gitignore` — it will never be committed.
@@ -43,6 +43,13 @@ npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Deploying to Vercel
+
+1. Push this repo to GitHub
+2. Import the project on [vercel.com](https://vercel.com)
+3. Add the `GROQ_API_KEY` environment variable in the Vercel dashboard
+4. Deploy — the `/api/generate` serverless function keeps your key safe
 
 ---
 
@@ -61,8 +68,10 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ```
 moodify/
+├── api/
+│   └── generate.js   # Serverless proxy — keeps API key server-side
 ├── src/
-│   ├── App.jsx       # Main app — all UI and API logic
+│   ├── App.jsx       # Main app — all UI logic
 │   └── main.jsx      # React entry point
 ├── public/
 ├── index.html

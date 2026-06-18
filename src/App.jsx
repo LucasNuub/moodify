@@ -56,7 +56,6 @@ export default function MoodPlaylistCurator() {
     const langInstruction = language === "hindi"
       ? "Songs must be in Hindi (Bollywood or Hindi indie). Return actual popular Hindi songs. Use the common romanized/English title spelling artists use."
       : "Songs must be in English.";
-    const apiKey = import.meta.env.VITE_GROQ_API_KEY;
     const systemPrompt = `You are a music curator. Given a mood, return ONLY valid JSON (no markdown, no backticks, no explanation):
 {
   "playlistName": "creative evocative playlist name (max 5 words)",
@@ -73,15 +72,10 @@ export default function MoodPlaylistCurator() {
 }
 Songs should perfectly match the mood. Be specific, not generic. ${langInstruction}`;
     try {
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      const res = await fetch("/api/generate", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`,
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          max_tokens: 1000,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: `Mood: "${mood}"${selectedMood ? ` — category: ${selectedMood.label}` : ""}. Language: ${language === "hindi" ? "Hindi" : "English"}.${isShuffle ? " Give me a completely different fresh set of 5 songs — avoid obvious or common picks, surprise me." : ""}` }
@@ -90,7 +84,7 @@ Songs should perfectly match the mood. Be specific, not generic. ${langInstructi
       });
       const data = await res.json();
       if (data.error) {
-        throw new Error(data.error.message || "API error");
+        throw new Error(data.error || "API error");
       }
       const raw = data.choices?.[0]?.message?.content || "";
       if (!raw) {
