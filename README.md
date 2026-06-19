@@ -2,6 +2,8 @@
 
 > Describe how you feel. Get the perfect songs for it.
 
+🔗 **Live:** [moodify-six-xi.vercel.app](https://moodify-six-xi.vercel.app)
+
 An AI-powered mood playlist curator built with React + Groq (Llama 3). Pick a mood category, describe your vibe in your own words, choose Hindi or English — and get a curated playlist in seconds. Each song links straight to Spotify.
 
 ---
